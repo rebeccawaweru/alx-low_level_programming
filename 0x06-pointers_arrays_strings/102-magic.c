@@ -1,8 +1,5 @@
 #include <stdio.h>
 
-/*
- * code that prints a[2] = 98
- */
 
 int main(void)
 {
