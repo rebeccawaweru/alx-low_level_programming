@@ -10,15 +10,20 @@
 
 unsigned int flip_bits(unsigned long int n, unsigned long int m)
 {
-       	int bits;
+	int bits;
+	int j;
+	unsigned long int y;
 	unsigned long int x;
 
 	bits = 0;
 	x = n ^ m;
-	if (x > 0)
+
+	for (j = 63; j >= 0; j--)
 	{
-		bits += (x & 1);
-		x >>= 1;
-	};
+		y = x >> j;
+		if (y & 1)
+			bits++;
+
+	}
 	return (bits);
 }
