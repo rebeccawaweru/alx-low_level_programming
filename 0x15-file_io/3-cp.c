@@ -82,7 +82,7 @@ int main(int argc, char *argv[])
 	}
 	/*invoke open_file() while passing arguments*/
 	from = open_file(argv[1], O_RDONLY, 0);
-	to = open_file(argv[2], O_WRONLY | O_CREAT | O_TRUNC, 0664);
+	to = open_file(argv[2], O_CREAT | O_WRONLY | O_TRUNC, 0664);
 	/*invoke copy_file() while passing arguments*/
 	copy_file(from, to, argv[2], argv[1]);
 
