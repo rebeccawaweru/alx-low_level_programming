@@ -46,6 +46,8 @@ int main(int argc, char *argv[])
 	int read_state, write_state;
 	int close_file_from, close_file_to;
 	char buffer[1024];
+	/*add permissions*/
+	int mode = 0664; /* rw-rw-r-- */
 
 	if (argc != 3) /*check number of arguments*/
 		error(97, NULL, 0);
@@ -53,7 +55,7 @@ int main(int argc, char *argv[])
 	if (file_from < 0)/*check for error*/
 		error(98, argv[1], 0);
 	/* open file_to */
-	file_to = open(argv[2], O_CREAT | O_TRUNC | O_WRONLY, 0664);
+	file_to = open(argv[2], O_CREAT | O_TRUNC | O_WRONLY, mode);
 	if (file_to < 0)/*check for errir*/
 		error(99, argv[2], 0);
 	/* read file_from*/
