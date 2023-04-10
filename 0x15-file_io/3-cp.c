@@ -1,93 +1,78 @@
 #include "main.h"
-/**
- * open_file - opens a file
- * main - calls all the functions
- * @flags: parameters used during system calls
- * @mode: interger that specifies the file permissions
- * @filename: name of the file
- * Return: 0
- */
-
-int open_file(const char *filename, int flags, int  mode)
-{
-	int f = open(filename, flags, mode);
-
-	return (f);
-}
+#include <stdarg.h>
 
 /**
- * copy_file - copy contents of a file
- * @f_from: file descriptor
- * @f_to: file descriptor
- * @dest_filename: file destination
- * @dest2_filename: file destination
- */
-void copy_file(int f_from, int f_to,
-const char *dest_filename, const char *dest2_filename)
-{
-	/*read in chunkcs of 1024 bytes at a time*/
-	char buf[1024];
-	ssize_t bytes_read;
-
-	while ((bytes_read = read(f_from, buf, 1024)) > 0)
-	{
-		/*write the bytes read in the f_to*/
-		ssize_t bytes_written = write(f_to, buf, bytes_read);
-		/*check if error occurred when writing*/
-		if (bytes_written != bytes_read)
-		{
-			dprintf(STDERR_FILENO, "Error: Can't write to %s\n", dest_filename);
-			exit(99);
-		}
-	}
-
-	/*check for read errors*/
-	if (bytes_read < 0)
-	{
-		dprintf(STDERR_FILENO, "Error: Can't read from file %s\n", dest2_filename);
-		exit(98);
-	}
-}
-/**
- * close_file -function to close a file
- * @fd: file descriptor
- */
-void close_file(int fd)
-{
-	/*close the file*/
-	close(fd);
-	/*check for errors when closing*/
-	if (fd < 0)
-	{
-		dprintf(STDERR_FILENO, "Error: Can't close fd %d\n", fd);
-		exit(100);
-	}
-}
-/**
- * main - invokes all other functions
- * @argc: number of arguments
- * @argv: array of arguments
+ * error - handles the errors in the main code
+ * @code: exit code
+ * @msg: error message
+ * @f:file descriptor
  *
  * Return: 0
  */
+
+int error(int code, char *msg, int f)
+{
+	switch (code)
+	{
+		case 97:
+			dprintf(STDERR_FILENO, "Usage: cp file_from file_to\n");
+			exit(code);
+		case 98:
+			dprintf(STDERR_FILENO, "Error: Can't read from file %s\n", msg);
+			exit(code);
+		case 99:
+			dprintf(STDERR_FILENO, "Error: Can't write to %s\n", msg);
+			exit(code);
+		case 100:
+			dprintf(STDERR_FILENO, "Error: Can't close f %d\n", f);
+			exit(code);
+		default:
+			return (0);
+	}
+}
+
+/**
+ * main - creates copy of a file
+ * @argc: argument counter
+ * @argv: number of arguments
+ *
+ * Return: 0 if success
+ */
+
 int main(int argc, char *argv[])
 {
-	int from, to;
+	/*declarations*/
+	int file_from, file_to;
+	int read_state, write_state;
+	int close_file_from, close_file_to;
+	char buffer[1024];
 
-	/*check for the number of arguments*/
-	if (argc != 3)
+	if (argc != 3) /*check number of arguments*/
+		error(97, NULL, 0);
+	file_from = open(argv[1], O_RDONLY);/*open file_from*/
+	if (file_from < 0)/*check for error*/
+		error(98, argv[1], 0);
+	/* open file_to */
+	file_to = open(argv[2], O_CREAT | O_TRUNC | O_WRONLY, 0664);
+	if (file_to < 0)/*check for errir*/
+		error(99, argv[2], 0);
+	/* read file_from*/
+	while ((read_state = read(file_from, buffer, 1024)) != 0)
 	{
-		dprintf(STDERR_FILENO, "Usage: cp file_from_file_to\n");
-		exit(97);
+		if (read_state < 0) /*check for error*/
+			error(98, argv[1], 0);
+		write_state = write(file_to, buffer, read_state); /*write*/
+		if (write_state < 0)
+			error(99, argv[2], 0);
 	}
-	/*invoke open_file() while passing arguments*/
-	from = open_file(argv[1], O_RDONLY, 0);
-	to = open_file(argv[2], O_CREAT | O_WRONLY | O_TRUNC, 0664);
-	/*invoke copy_file() while passing arguments*/
-	copy_file(from, to, argv[2], argv[1]);
+	/* close file_from */
+	close_file_from = close(file_from);
+	if (close_file_from < 0)
+		error(100, NULL, file_from);
+	/* close file_to */
+	close_file_to = close(file_to);
+	if (close_file_to < 0)
+		error(100, NULL, file_to);
 
-	/*close the file descriptors*/
-	close_file(from);
-	close_file(to);
 	return (0);
 }
