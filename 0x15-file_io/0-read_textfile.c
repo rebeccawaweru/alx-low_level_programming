@@ -31,7 +31,8 @@ ssize_t read_textfile(const char *filename, size_t letters)
 		return (0);
 	/* Read and write the contents of the file in chunks of */
 	/* SIZE_OF_BUFFER bytes */
-	while ((noread = read(f, buffer, SIZE_OF_BUFFER)) > 0 && total < (ssize_t) letters)
+	while ((noread = read(f, buffer, SIZE_OF_BUFFER)) > 0
+	&& total < (ssize_t) letters)
 	{
 		/*write buffer contents to the standard output*/
 		/*use STDOUT_FILENO - POSIX symbolic constant*/
