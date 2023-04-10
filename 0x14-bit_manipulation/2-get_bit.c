@@ -11,5 +11,6 @@ int get_bit(unsigned long int n, unsigned int index)
 {
 	while (index >= sizeof(unsigned long int) * 8)
 		return (-1);
+	/* >> right shift operator. Shifts bits to given index*/
 	return ((n >> index) & 1);
 }

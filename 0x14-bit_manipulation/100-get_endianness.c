@@ -9,6 +9,7 @@
 int get_endianness(void)
 {
 	int a = 1;
+	/* use & to get address of variable a*/
 	char *endianess = (char *)&a;
 
 	return (*endianess);

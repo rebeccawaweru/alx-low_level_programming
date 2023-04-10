@@ -16,6 +16,8 @@ unsigned int flip_bits(unsigned long int n, unsigned long int m)
 	unsigned long int x;
 
 	bits = 0;
+	/*use ^ - a bitwise XOR operator */
+	/* n ^ m - performs exclusive OR operation */
 	x = n ^ m;
 
 	for (j = 63; j >= 0; j--)
