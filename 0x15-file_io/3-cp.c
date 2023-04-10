@@ -8,7 +8,7 @@
  * Return: 0
  */
 
-int open_file(const char *filename, int flags, mode_t mode)
+int open_file(const char *filename, int flags, int  mode)
 {
 	int f = open(filename, flags, mode);
 
@@ -29,7 +29,7 @@ const char *dest_filename, const char *dest2_filename)
 	char buf[1024];
 	ssize_t bytes_read;
 
-	while ((bytes_read = read(f_from, buf, sizeof(buf))) > 0)
+	while ((bytes_read = read(f_from, buf, 1024)) > 0)
 	{
 		/*write the bytes read in the f_to*/
 		ssize_t bytes_written = write(f_to, buf, bytes_read);
