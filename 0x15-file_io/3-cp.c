@@ -19,9 +19,11 @@ int open_file(const char *filename, int flags, mode_t mode)
  * copy_file - copy contents of a file
  * @f_from: file descriptor
  * @f_to: file descriptor
- * @argv: number of arguments
+ * @dest_filename: file destination
+ * @dest2_filename: file destination
  */
-void copy_file(int f_from, int f_to, char *argv[])
+void copy_file(int f_from, int f_to,
+const char *dest_filename, const char *dest2_filename)
 {
 	/*read in chunkcs of 1024 bytes at a time*/
 	char buf[1024];
@@ -34,7 +36,7 @@ void copy_file(int f_from, int f_to, char *argv[])
 		/*check if error occurred when writing*/
 		if (bytes_written != bytes_read)
 		{
-			dprintf(STDERR_FILENO, "Error: Can't write to %s\n", argv[2]);
+			dprintf(STDERR_FILENO, "Error: Can't write to %s\n", dest_filename);
 			exit(99);
 		}
 	}
@@ -42,7 +44,7 @@ void copy_file(int f_from, int f_to, char *argv[])
 	/*check for read errors*/
 	if (bytes_read < 0)
 	{
-		dprintf(STDERR_FILENO, "Error: Can't read from file %s\n", argv[1]);
+		dprintf(STDERR_FILENO, "Error: Can't read from file %s\n", dest2_filename);
 		exit(98);
 	}
 }
@@ -82,7 +84,7 @@ int main(int argc, char *argv[])
 	from = open_file(argv[1], O_RDONLY, 0);
 	to = open_file(argv[2], O_WRONLY | O_CREAT | O_TRUNC, 0664);
 	/*invoke copy_file() while passing arguments*/
-	copy_file(from, to, 0);
+	copy_file(from, to, argv[2], argv[1]);
 
 	/*close the file descriptors*/
 	close_file(from);
