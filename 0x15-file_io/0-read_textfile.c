@@ -1,7 +1,5 @@
 #include "main.h"
 
-#define SIZE_OF_BUFFER 1024
-
 /**
  * read_textfile - function that reads text file and prints to POSIX
  * @letters: number of letters to be read and printed
@@ -15,7 +13,7 @@ ssize_t read_textfile(const char *filename, size_t letters)
 {
 	int f; /*refers to the file descriptor*/
 	/* maximum size of data we can read from a file in a single operation */
-	char buffer[SIZE_OF_BUFFER];
+	char buffer[1024];
 	/* total is total number of bytes noread and nowritten*/
 	ssize_t noread, nowritten, total = 0;
 	/* first check if filename is NULL */
@@ -31,7 +29,7 @@ ssize_t read_textfile(const char *filename, size_t letters)
 		return (0);
 	/* Read and write the contents of the file in chunks of */
 	/* SIZE_OF_BUFFER bytes */
-	while ((noread = read(f, buffer, SIZE_OF_BUFFER)) > 0
+	while ((noread = read(f, buffer, sizeof(buffer))) > 0
 	&& total < (ssize_t) letters)
 	{
 		/*write buffer contents to the standard output*/

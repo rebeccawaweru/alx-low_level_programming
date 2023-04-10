@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <error.h>
 
 /*
  * Guards ensure header file is included only once and there are no duplicates.
