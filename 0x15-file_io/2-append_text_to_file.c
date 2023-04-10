@@ -30,8 +30,10 @@ int append_text_to_file(const char *filename, char *text_content)
 		/*check if append is successfully*/
 		if (new_file < 0)
 			return (-1);
+		close(f);
+		return (1);
 	}
 	/*close your file*/
 	close(f);
-	return (-1);
+	return (1);
 }
