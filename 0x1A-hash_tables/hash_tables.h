@@ -42,5 +42,45 @@ int hash_table_set(hash_table_t *ht, const char *key, const char *value);
 char *hash_table_get(const hash_table_t *ht, const char *key);
 void hash_table_print(const hash_table_t *ht);
 void hash_table_delete(hash_table_t *ht);
+
+/**
+ * struct shash_node_s - Node of hash table sorted
+ * @key: the key
+ * @value: the value
+ * @next: points to the next node
+ * @sprev: previous element
+ * @snext: next element
+ */
+typedef struct shash_node_s
+{
+	char *key;
+	char *value;
+	struct shash_node_s *next;
+	struct shash_node_s *sprev;
+	struct shash_node_s *snext;
+} shash_node_t;
+
+/**
+ * struct shash_table_s - sorted hash table
+ * @size: the size
+ * @array: an array
+ * @shead: pointer to first element
+ * @stail: pointer to last element
+ */
+typedef struct shash_table_s
+{
+	unsigned long int size;
+	shash_node_t **array;
+	shash_node_t *shead;
+	shash_node_t *stail;
+} shash_table_t;
+
+shash_table_t *shash_table_create(unsigned long int size);
+int shash_table_set(shash_table_t *ht, const char *key, const char *value);
+char *shash_table_get(const shash_table_t *ht, const char *key);
+void shash_table_print(const shash_table_t *ht);
+void shash_table_print_rev(const shash_table_t *ht);
+void shash_table_delete(shash_table_t *ht);
+
 #endif
 
