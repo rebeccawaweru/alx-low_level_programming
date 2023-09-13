@@ -51,7 +51,7 @@ int exponential_search(int *array, size_t size, int value)
 	if (array[0] != value)
 	{
 		for (j = 1; j < size && array[j] <= value; j = j * 2)
-			printf("Value checked array[%ld] = [%ld]\n", j, array[j]);
+			printf("Value checked array[%ld] = [%d]\n", j, array[j]);
 	}
 	right = j < size ? j : size - 1;
 	printf("Value found between indexes [%ld] and [%ld]\n", j / 2, right);
